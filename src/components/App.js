@@ -1,24 +1,40 @@
-import phrasesFriends from '../data/phrases.json';
-import { useState } from 'react';
-// import getQuotes from '../services/fetchQuotes';
+// import phrasesFriends from '../data/phrases.json';
+import { useState, useEffect } from 'react';
+import getQuotes from '../services/fetchQuotes';
+// import localStorage from '../services/localStorage';
 import '../styles/App.scss';
 
 function App() {
-  // const [data, setData] = ('data', []);
-  const [data, setData] = useState(phrasesFriends);
+  // const [data, setData] = useState(localStorage.get('data', []));
+  const [data, setData] = useState([]);
   const [newQuote, setNewQuote] = useState({
     quote: '',
     character: '',
   });
   const [filterQuote, setFilterQuote] = useState('');
+  const [filterCharacter, setFilterCharacter] = useState('everybody');
 
   // useEffect(() => {
   //   if (data.length === 0) {
-  //     getQuotes().then((dataFromApi) => {
-  //       setData(dataFromApi);
+  //     getQuotes().then((datafromAPI) => {
+  //       localStorage.set('data', datafromAPI);
+  //       setData(datafromAPI);
   //     });
   //   }
   // }, []);
+
+  useEffect(
+    () =>
+      getQuotes().then((dataFromApi) => {
+        setData(dataFromApi);
+      }),
+    []
+  );
+
+  const handleFilterCharacter = (event) => {
+    setFilterCharacter(event.target.value);
+  };
+
   const handleFilterQuote = (event) => {
     setFilterQuote(event.target.value);
   };
@@ -33,9 +49,23 @@ function App() {
   const handleClick = (event) => {
     event.preventDefault();
     setData([...data, newQuote]);
+    setNewQuote({
+      quote: '',
+      character: '',
+    });
   };
 
   const htmlData = data
+
+    .filter((oneCharacter) => {
+      if (filterCharacter === 'everybody') {
+        return true;
+      } else if (filterCharacter === oneCharacter.character) {
+        return true;
+      } else {
+        return false;
+      }
+    })
 
     .filter((oneQuote) => {
       return oneQuote.quote
@@ -74,8 +104,12 @@ function App() {
 
           <label htmlFor="character">
             Filtra por personaje
-            <select name="Filtra por personaje" id="character">
-              <option value="Todos">Todos</option>
+            <select
+              name="Filtra por personaje"
+              id="character"
+              onChange={handleFilterCharacter}
+            >
+              <option value="everybody">Todos</option>
               <option value="Ross">Ross</option>
               <option value="Monica">Monica</option>
               <option value="Joey">Joey</option>
