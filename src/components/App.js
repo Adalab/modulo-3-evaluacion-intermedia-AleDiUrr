@@ -1,11 +1,10 @@
 import phrasesFriends from '../data/phrases.json';
-import { useState, useEffect } from 'react';
-import getQuotes from '../services/fetchQuotes';
-import localStorage from '../services/localStorage';
+import { useState } from 'react';
+// import getQuotes from '../services/fetchQuotes';
 import '../styles/App.scss';
 
 function App() {
-  // const [data, setData] = useState(localStorage.get('quotes', []));
+  // const [data, setData] = ('data', []);
   const [data, setData] = useState(phrasesFriends);
   const [newQuote, setNewQuote] = useState({
     quote: '',
@@ -14,9 +13,8 @@ function App() {
 
   // useEffect(() => {
   //   if (data.length === 0) {
-  //     getQuotes().then((data) => {
-  //       localStorage.set('quotes', data);
-  //       setData(data);
+  //     getQuotes().then((dataFromApi) => {
+  //       setData(dataFromApi);
   //     });
   //   }
   // }, []);
