@@ -10,6 +10,7 @@ function App() {
     quote: '',
     character: '',
   });
+  const [filterQuote, setFilterQuote] = useState('');
 
   // useEffect(() => {
   //   if (data.length === 0) {
@@ -18,6 +19,9 @@ function App() {
   //     });
   //   }
   // }, []);
+  const handleFilterQuote = (event) => {
+    setFilterQuote(event.target.value);
+  };
 
   const handleNewQuote = (event) => {
     setNewQuote({
@@ -31,16 +35,24 @@ function App() {
     setData([...data, newQuote]);
   };
 
-  const htmlData = data.map((character, i) => {
-    return (
-      <li key={i}>
-        <p>
-          {character.quote}
-          <strong>{character.character}</strong>
-        </p>
-      </li>
-    );
-  });
+  const htmlData = data
+
+    .filter((oneQuote) => {
+      return oneQuote.quote
+        .toLocaleLowerCase()
+        .includes(filterQuote.toLocaleLowerCase());
+    })
+
+    .map((character, i) => {
+      return (
+        <li key={i}>
+          <p>
+            {character.quote}
+            <strong>{character.character}</strong>
+          </p>
+        </li>
+      );
+    });
 
   return (
     <>
@@ -49,27 +61,53 @@ function App() {
       </header>
 
       <main>
+        <form>
+          <label htmlFor="quote">
+            Filtra por frase
+            <input
+              type="text"
+              name="quote"
+              id="quote"
+              onChange={handleFilterQuote}
+            />
+          </label>
+
+          <label htmlFor="character">
+            Filtra por personaje
+            <select name="Filtra por personaje" id="character">
+              <option value="Todos">Todos</option>
+              <option value="Ross">Ross</option>
+              <option value="Monica">Monica</option>
+              <option value="Joey">Joey</option>
+              <option value="Phoebe">Phoebe</option>
+              <option value="Chandler">Chandler</option>
+              <option value="Rachel">Rachel</option>
+            </select>
+          </label>
+        </form>
         <ul>{htmlData}</ul>
         <form>
           <h2>Añade una nueva frase</h2>
-          <label htmlFor="quote">Frase</label>
-          <input
-            type="text"
-            name="quote"
-            id="quote"
-            value={newQuote.quote}
-            onChange={handleNewQuote}
-          />
-
-          <label htmlFor="character">Personaje</label>
-          <input
-            type="text"
-            name="character"
-            id="character"
-            value={newQuote.character}
-            onChange={handleNewQuote}
-          />
-
+          <label htmlFor="quote">
+            Frase
+            <input
+              type="text"
+              name="quote"
+              id="quote"
+              value={newQuote.quote}
+              onChange={handleNewQuote}
+            />
+          </label>
+          <label htmlFor="character">
+            Personaje
+            <input
+              type="text"
+              name="character"
+              id="character"
+              value={newQuote.character}
+              onChange={handleNewQuote}
+            />
+          </label>
           <input
             className="new-contact__btn"
             type="submit"
