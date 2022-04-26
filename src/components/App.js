@@ -3,6 +3,19 @@ import { useState } from 'react';
 import '../styles/App.scss';
 
 function App() {
+  const [data, setData] = useState(phrasesFriends);
+
+  const htmlData = data.map((character, i) => {
+    return (
+      <li key={i}>
+        <p>
+          {character.quote}
+          <strong>{character.character}</strong>
+        </p>
+      </li>
+    );
+  });
+
   return (
     <>
       <header>
@@ -10,10 +23,10 @@ function App() {
       </header>
 
       <main>
-        {/* <ul>{htmlData}</ul> */}
+        <ul>{htmlData}</ul>
         <form>
           <h2>Añade una nueva frase</h2>
-          <label htmlFor="pharse">Frase</label>
+          <label htmlFor="phrase">Frase</label>
           <input type="text" name="phrase" id="phrase" />
 
           <label htmlFor="character">Personaje</label>
