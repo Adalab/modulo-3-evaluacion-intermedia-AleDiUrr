@@ -1,11 +1,8 @@
-// import phrasesFriends from '../data/phrases.json';
 import { useState, useEffect } from 'react';
 import getQuotes from '../services/fetchQuotes';
-// import localStorage from '../services/localStorage';
 import '../styles/App.scss';
 
 function App() {
-  // const [data, setData] = useState(localStorage.get('data', []));
   const [data, setData] = useState([]);
   const [newQuote, setNewQuote] = useState({
     quote: '',
@@ -13,15 +10,6 @@ function App() {
   });
   const [filterQuote, setFilterQuote] = useState('');
   const [filterCharacter, setFilterCharacter] = useState('everybody');
-
-  // useEffect(() => {
-  //   if (data.length === 0) {
-  //     getQuotes().then((datafromAPI) => {
-  //       localStorage.set('data', datafromAPI);
-  //       setData(datafromAPI);
-  //     });
-  //   }
-  // }, []);
 
   useEffect(
     () =>
@@ -55,6 +43,12 @@ function App() {
     });
   };
 
+  const handleReset = (event) => {
+    setNewQuote('');
+    setFilterCharacter('everybody');
+    setFilterQuote('');
+  };
+
   const htmlData = data
 
     .filter((oneCharacter) => {
@@ -77,8 +71,7 @@ function App() {
       return (
         <li key={i}>
           <p>
-            {character.quote}
-            <strong>{character.character}</strong>
+            "{character.quote}" <strong>{character.character}</strong>
           </p>
         </li>
       );
@@ -88,9 +81,6 @@ function App() {
     <>
       <header>
         <h1>Frases de Friends.</h1>
-      </header>
-
-      <main>
         <form>
           <label htmlFor="quote">
             Filtra por frase
@@ -109,7 +99,7 @@ function App() {
               id="character"
               onChange={handleFilterCharacter}
             >
-              <option value="everybody">Todos</option>
+              <option value="everybody">Everybody</option>
               <option value="Ross">Ross</option>
               <option value="Monica">Monica</option>
               <option value="Joey">Joey</option>
@@ -119,6 +109,9 @@ function App() {
             </select>
           </label>
         </form>
+      </header>
+
+      <main>
         <ul>{htmlData}</ul>
         <form>
           <h2>Añade una nueva frase</h2>
@@ -143,11 +136,11 @@ function App() {
             />
           </label>
           <input
-            className="new-contact__btn"
             type="submit"
             value="Añadir una nueva frase"
             onClick={handleClick}
           />
+          <button onClick={handleReset}>Reset</button>
         </form>
       </main>
     </>
